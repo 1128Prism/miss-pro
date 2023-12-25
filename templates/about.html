@@ -1,0 +1,530 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="author" content="PrismIf">
+    <title>医学图像分割算法</title>
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/carousel/">
+    <link href={{ url_for('static',filename='assets/libs/bootstrap/dist/css/bootstrap.min.css') }} rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href={{ url_for('static',filename='assets/css/about.css') }} rel="stylesheet">
+    <!-- Favicon -->
+    <link rel="icon" href="{{ url_for('static',filename='assets/img/brand/favicon.png') }}" type="image/png'">
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+          href="{{ url_for('static',filename='assets/libs/@fortawesome/fontawesome-free/css/all.min.css') }}">
+    <!-- Quick CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/quick-website.css') }}" id="stylesheet">
+    <!-- myJs -->
+    <script type="text/javascript" src={{ url_for('static',filename='assets/js/jump.js') }}></script>
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+
+        .b-example-divider {
+            height: 3rem;
+            background-color: rgba(0, 0, 0, .1);
+            border: solid rgba(0, 0, 0, .15);
+            border-width: 1px 0;
+            box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+        }
+
+        .b-example-vr {
+            flex-shrink: 0;
+            width: 1.5rem;
+            height: 100vh;
+        }
+
+        .bi {
+            vertical-align: -.125em;
+            fill: currentColor;
+        }
+
+        @keyframes hidePreloader {
+            0% {
+                width: 100%;
+                height: 100%;
+            }
+
+            100% {
+                width: 0;
+                height: 0;
+            }
+        }
+
+        body > div.preloader {
+            position: fixed;
+            background: white;
+            width: 100%;
+            height: 100%;
+            z-index: 1071;
+            opacity: 0;
+            transition: opacity .5s ease;
+            overflow: hidden;
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        body:not(.loaded) > div.preloader {
+            opacity: 1;
+        }
+
+        body:not(.loaded) {
+            overflow: hidden;
+        }
+
+        body.loaded > div.preloader {
+            animation: hidePreloader .5s linear .5s forwards;
+        }
+    </style>
+    <script>
+        window.addEventListener("load", function () {
+            setTimeout(function () {
+                document.querySelector('body').classList.add('loaded');
+            }, 300);
+        });
+    </script>
+</head>
+<body>
+<!-- Preloader -->
+<div class="preloader">
+    <div class="spinner-border text-primary" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+</div>
+<div class="modal fade" tabindex="-1" role="dialog" id="modal-cookies" data-backdrop="false"
+     aria-labelledby="modal-cookies" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-aside left-4 right-4 bottom-4">
+        <div class="modal-content bg-dark-dark">
+            <div class="modal-body">
+                <!-- Text -->
+                <p class="text-sm text-white mb-3">
+                    We use cookies so that our themes work for you. By using our website, you agree to our use of
+                    cookies.
+                </p>
+                <!-- Buttons -->
+                <a href="https://github.com/1128Prism/miss.git" class="btn btn-sm btn-white" target="_blank">Learn
+                    more</a>
+                <button type="button" class="btn btn-sm btn-primary mr-2" data-dismiss="modal">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<main>
+    <!-- Navbar-top -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white">
+        <div class="container">
+            <!-- Brand -->
+            <a class="navbar-brand" href="/">
+                <img alt="Image placeholder" src="{{ url_for('static',filename='assets/img/brand/dark.svg') }}"
+                     id="navbar-logo">
+            </a>
+            <!-- Toggler -->
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+                    aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <!-- Collapse -->
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <ul class="navbar-nav mt-4 mt-lg-0 ml-auto">
+                    <li class="nav-item ">
+                        <a class="nav-link" href="/">主页</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/about" target="_blank">医学图像分割算法简介</a>
+                    </li>
+                    <li class="nav-item dropdown dropdown-animate" data-toggle="hover">
+                        <a class="nav-link" href="/example" target="_blank" role="button" data-toggle="dropdown"
+                           aria-haspopup="true" aria-expanded="false">案例展示</a>
+                        <div class="dropdown-menu dropdown-menu-single">
+                            <a href="/example" target="_blank" class="dropdown-item">医学图像常用数据集介绍</a>
+                            <div class="dropdown-divider"></div>
+                            <a href="/example/classic" target="_blank" class="dropdown-item">传统医学图像分割方法</a>
+                            <div class="dropdown-divider"></div>
+                            <a href="/example/dl" target="_blank"
+                               class="dropdown-item">基于深度学习的医学图像分割方法</a>
+                        </div>
+                    </li>
+                    <li class="nav-item ">
+                        <a class="nav-link" href="/live-index/" target="_blank">实时体验</a>
+                    </li>
+                </ul>
+                <!-- Button -->
+                <a class="navbar-btn btn btn-sm btn-primary d-none d-lg-inline-block ml-3"
+                   href="https://github.com/1128Prism/miss.git" target="_blank">
+                    更多
+                </a>
+            </div>
+        </div>
+        </div>
+    </nav>
+
+    <!-- Left nav -->
+    <div class="d-flex flex-column flex-shrink-0 bg-section-secondary"
+         style="width: 4.5rem; float: left; position:fixed; margin-top:48px" id="left-nav">
+        <ul class="nav nav-pills nav-flush flex-column mb-auto text-center">
+            <li class="nav-item" data-toggle="hover">
+                <a class="nav-link" href="javascript:void(0)" onclick="edge_jump()">
+                    边界
+                </a>
+            </li>
+            <li class="nav-item" data-toggle="hover">
+                <a class="nav-link" href="javascript:void(0)" onclick="threshold_jump()">
+                    阈值
+                </a>
+            </li>
+            <li class="nav-item" data-toggle="hover">
+                <a class="nav-link" href="javascript:void(0)" onclick="area_jump()">
+                    区域增长
+                </a>
+            </li>
+            <li class="nav-item" data-toggle="hover">
+                <a class="nav-link" href="javascript:void(0)" onclick="statics_jump()">
+                    统计学
+                </a>
+            </li>
+
+            <li class="nav-item" data-toggle="hover">
+                <a class="nav-link" href="javascript:void(0)" onclick="pic_jump()">
+                    图论
+                </a>
+            </li>
+            <li class="nav-item" data-toggle="hover">
+                <a class="nav-link" href="javascript:void(0)" onclick="lsf_jump()">
+                    活动轮廓模型
+                </a>
+            </li>
+            <li class="nav-item" data-toggle="hover">
+                <a class="nav-link" href="javascript:void(0)" onclick="info_jump()">
+                    信息论
+                </a>
+            </li>
+            <li class="nav-item" data-toggle="hover">
+                <a class="nav-link" href="javascript:void(0)" onclick="fuzzy_jump()">
+                    模糊集理论
+                </a>
+            </li>
+
+            <li class="nav-item" data-toggle="hover">
+                <a class="nav-link" href="javascript:void(0)" onclick="sj_jump()">
+                    神经网络
+                </a>
+            </li>
+            <li class="nav-item" data-toggle="hover">
+                <a class="nav-link" href="javascript:void(0)" onclick="fcn_jump()">
+                    FCN
+                </a>
+            </li>
+            <li class="nav-item" data-toggle="hover">
+                <a class="nav-link" href="javascript:void(0)" onclick="unet_jump()">
+                    U-Net
+                </a>
+            </li>
+            <li class="nav-item" data-toggle="hover">
+                <a class="nav-link" href="javascript:void(0)" onclick="deeplab_jump()">
+                    deeplab
+                </a>
+            </li>
+            <li class="nav-item" data-toggle="hover">
+                <a class="nav-link" href="javascript:void(0)" onclick="maskrcnn_jump()">
+                    Mask R-CNN
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Heading -->
+    <div class="row mb-3 justify-content-center text-center">
+        <div class="col-lg-6">
+            <h2 class="mt-4 pb-3">
+                医学图像分割 <strong class="text-primary"> 算法简介</strong>
+            </h2>
+            <div class="mt-2">
+                <p class="lead lh-160">现在主流的医学图像分割方法主要是基于经典方法及深度学习。</p>
+                <p class="lead lh-160">阈值分割是图像分割任务中最常用的方法之一，通常被作为有效的预处理步骤。</p>
+                <p class="lead lh-160">
+                    医学图像中的结构可以作为模式（图像等）来处理，可以使用聚类技术来对其进行分割，
+                    其中将C-means与模糊理论相结合的FCM算法具有广泛的应用前景。</p>
+                <p class="lead lh-160">卷积神经网络CNN的出现加速了图像处理领域的发展.</p>
+                <p class="lead lh-160">基于CNN开发的GoogleNet7、ResNet8等网络模型在图像处理领域广泛应用.</p>
+                <p class="lead lh-160">但直至全卷积神经网络FCN的出现才加速了图像分割领域的研究. </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Content -->
+    <div class="container marketing">
+        <div id="div_edge" style="padding-top:2px">
+            <hr class="featurette-divider">
+            <div class="row featurette">
+                <div class="col-md-7">
+                    <h2 class="fw-normal lh-1">基于边界的 <span class="text-muted">医学图像分割算法</span></h2>
+                    <p class="lead mr-5 mt-5">将图像划分为子图,获得二维图像时,不可避免会存在边界,边界像素表现为灰度幅值的不连续。
+                        而显现边界的关键是边界两侧像素特征存在明显的差异,因此可以通过边界进行子图像划分,实现图像的分割。</p>
+                </div>
+                <div class="col-md-5">
+                    <img src={{ url_for('static',filename='assets/img/pics/edge.png') }} width="445px"/>
+                    <p style="padding:50px 150px 0"> 不同边缘分割算子 </p>
+                </div>
+            </div>
+        </div>
+
+        <div id="div_threshold" style="padding-top:2px">
+            <hr class="featurette-divider">
+            <div class="row featurette">
+                <div class="col-md-7 order-md-2">
+                    <h2 class="fw-normal lh-1 ml-5">基于阈值的 <span class="text-muted">医学图像分割算法</span></h2>
+                    <p class="lead ml-5 mt-5">阈值是一种经典的基于区域的并行分割技术,其将图像像素点分为若干类,在肿瘤性疾病诊断中具有较高的应用价值。
+                        按照分割区域方式又可分为局部阈值分割,或称为自适应性阈值法。阈值分割利用图像灰度直方图信息,计算量小,利于实现,但是易导致错误分割,同时未考虑空间信息,易受噪音等原因产生伪影,其主要作为一种预处理方法。</p>
+                </div>
+                <div class="col-md-5 order-md-1">
+                    <img src={{ url_for('static',filename='assets/img/pics/threshold.jpg') }} width="445px"
+                         style="margin-top:50px"/>
+                    <p style="padding:50px 150px 0"> 设置阈值进行分割 </p>
+                </div>
+            </div>
+        </div>
+
+        <div id="div_area" style="padding-top:2px">
+            <hr class="featurette-divider">
+            <div class="row featurette">
+                <div class="col-md-7">
+                    <h2 class="fw-normal lh-1">基于区域增长的 <span class="text-muted">医学图像分割算法</span></h2>
+                    <p class="lead mr-5 mt-5">区域生长和分裂合并方法,是一种典型的串行区域分割方法,其根据用户的预定义相似性函数,将图像像素或者子区域聚合成为更大的区域。
+                        在实际应用中,区域增长法需要确定区域数目,选择具有代表性的种子点,选择有意义的特征,选择停止的准则,计算方法简单,区域算法的精髓是将图像分类为多个相似的小区域,按照邻接参考某种标准合并,
+                        对于连续的均匀的目标,如血管﹑实质性组织,具有较好的准确性、高效性。该法对噪音较敏感,更适合分割肿瘤、伤疤这些较小的结构。</p>
+                </div>
+                <div class="col-md-5">
+                    <img src={{ url_for('static',filename='assets/img/pics/area.png') }} width="445px"/>
+                    <p style="padding:50px 150px 0"> 区域增长分割示意图 </p>
+                </div>
+            </div>
+        </div>
+
+        <div id="div_statics" style="padding-top:2px">
+            <hr class="featurette-divider">
+            <div class="row featurette">
+                <div class="col-md-7 order-md-2">
+                    <h2 class="fw-normal lh-1 ml-5">基于统计学的 <span class="text-muted">医学图像分割算法</span></h2>
+                    <p class="lead ml-5 mt-5">从统计学的角度进行图像分割是指将图像的各个像素点特征值作为一种概率分布的随机变量,
+                        从概率的角度来看,找出最应该得到图像的某种组合,又可分为分类器、聚类、随机场、混合分布等。
+                        以最常用的聚类分析为例,其余分类器算法类似,但无需训练样本，是一种无监督的算法,通过迭代进行图像分类,提取每一类的特征值,按照算法又可分为K均值﹑模糊C均值、期待最大化算法等。</p>
+                </div>
+                <div class="col-md-5 order-md-1">
+                    <img src={{ url_for('static',filename='assets/img/pics/mrf.png') }} width="445px"/>
+                    <p style="padding:50px 150px"> Markov随机场示例 </p>
+                </div>
+            </div>
+        </div>
+
+        <div id="div_pics" style="padding-top:2px">
+            <hr class="featurette-divider">
+            <div class="row featurette">
+                <div class="col-md-7">
+                    <h2 class="fw-normal lh-1">基于图论的 <span class="text-muted">医学图像分割算法</span></h2>
+                    <p class="lead mr-5 mt-5">基于图论的图像分割是一种新的分割技术,无需初始化,其可将图像分割转换为图的最优划分回题,
+                        利用剪切标准得到最佳的分割策略,是一种全局准则,图像分割的过程中是得到全局最优解的过程。</p>
+                </div>
+                <div class="col-md-5">
+                    <img src={{ url_for('static',filename='assets/img/pics/graphic.png') }} width="445px"/>
+                    <p style="padding:50px 150px 0"> 柯尼斯堡七桥问题 </p>
+                </div>
+            </div>
+        </div>
+
+        <div id="div_lsf" style="padding-top:2px">
+            <hr class="featurette-divider">
+            <div class="row featurette">
+                <div class="col-md-7 order-md-2">
+                    <h2 class="fw-normal lh-1 ml-5">基于活动轮廓模型的 <span class="text-muted">医学图像分割算法</span>
+                    </h2>
+                    <p class="lead ml-5 mt-5">活动轮廓模型是由Kass 等首先提出一种图像分割技术，Gaselles等进一步发展了该技术﹐近年来开始用于视觉追踪等其他领域。
+                        基于边缘的活动轮廓莫悉尼港采用边缘停止函数,可分割边缘化较明显的图像﹐对噪声较敏感,其主要优势在于无需设置图像的全局约束项,对于某些分割目标和背景不均匀的图像分割效果较好。 </p>
+                </div>
+                <div class="col-md-5 order-md-1">
+                    <img src={{ url_for('static',filename='assets/img/pics/drlse.png') }} width="445px"
+                         style="margin-top:50px"/>
+                    <p style="padding:50px 150px 0">DRLSE示意图</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="div_info" style="padding-top:4px">
+            <hr class="featurette-divider">
+            <div class="row featurette">
+                <div class="col-md-7">
+                    <h2 class="fw-normal lh-1 mr-5">基于信息论的 <span class="text-muted">医学图像分割算法</span></h2>
+                    <p class="lead mr-5 mt-5">信息论是旨在采用概率论﹑数数理统计方法并,将信息的传递视为一种概率事件,熵是信息论最基本的度量单位,
+                        医学图像分割便采用信息论中的嫡理论进行。极值可获得最合适的分割阈值。目前最常用的方法为极小极大熵值公式分割算法,
+                        其将图像灰度直方图划分为多个相互独立的类,使各类熵总量最大,其具有全局客观属性,但收敛速度慢,计算量大,对噪声较大、结构复杂的图像分割效果不理想。
+                    <p>
+                </div>
+                <div class="col-md-5">
+                    <img src={{ url_for('static',filename='assets/img/pics/statics.png') }} width="445px"/>
+                    <p style="padding:50px 130px"> 布谷鸟搜索算法求最大熵 </p>
+                </div>
+            </div>
+        </div>
+
+        <div id="div_fuzzy" style="padding-top:4px">
+            <hr class="featurette-divider">
+            <div class="row featurette">
+                <div class="col-md-7 order-md-2">
+                    <h2 class="fw-normal lh-1 ml-5">基于模糊集理论的 <span class="text-muted">医学图像分割算法</span>
+                    </h2>
+                    <p class="lead ml-5 mt-5">指采用不准确的经验知识定义一个事件。模糊理论主要被用于模式识别领域,用于表示信息不完备﹑不确定﹑病态表示的不确定性,
+                        用于图像分割技术又可分为模糊阈值分割、模糊聚类分割﹑模糊连接度分割等。</p>
+                </div>
+                <div class="col-md-5 order-md-1">
+                    <img src={{ url_for('static',filename='assets/img/pics/fcm.jpg') }} width="445px"/>
+                    <p style="padding:50px 150px 0"> fcm算法效果示意 </p>
+                </div>
+
+            </div>
+        </div>
+
+        <div id="div_sj" style="padding-top:4px">
+            <hr class="featurette-divider">
+            <div class="row featurette">
+                <div class="col-md-7">
+                    <h2 class="fw-normal lh-1 mr-5">基于神经网络的<span class="text-muted">医学图像分割算法</span></h2>
+                    <p class="lead mr-5 mt-5">
+                        神经网络实质是一个分类以及标记图像的过程中,按照拓扑结构又可分为前向神经网络﹑反馈网络、自组织神经网络。
+                        神经网络图像分割将分割问题转化为能量函数、分类等问题,通过训练,可修正节点之间的连接关系以及权值,进而更好的对新的图像进行分割。
+                    </p>
+                </div>
+                <div class="col-md-5 order-md-1">
+                    <img src={{ url_for('static',filename='assets/img/pics/cnn.png') }} width="445px"/>
+                    <p style="padding:50px 150px 0"> cnn卷积层结构 </p>
+                </div>
+            </div>
+        </div>
+
+        <div id="div_fcn" style="padding-top:4px">
+            <hr class="featurette-divider">
+            <div class="row featurette">
+                <div class="col-md-7 order-md-2">
+                    <h2 class="fw-normal lh-1 mr-5">基于FCN的 <span class="text-muted">医学图像分割算法</span></h2>
+                    <p class="lead mr-5 mt-5">
+                        全卷积神经网络FCN(Long J, 2015)是一种深度学习架构, 其核心思想是通过使用卷积层实现端到端的像素级别预测.
+                        相较于传统的卷积神经网络(CNN), FCN不包含全连接层, 而是使用卷积层来处理输入图像的不同区域.
+                        这种结构使得FCN能够接受任意大小的输入图像, 并输出相应大小的分割结果.
+                        但FCN对大量标记数据的需求较大, 尤其在医学图像领域, 获取高质量的标记数据是一个挑战.
+                        此外训练深度的FCN模型需要大量的计算资源, 这在某些环境下可能限制了其广泛应用.
+                    </p>
+                </div>
+                <div class="col-md-5 order-md-1">
+                    <img src={{ url_for('static',filename='assets/img/pics/fcn.png') }} width="445px"/>
+                    <p style="padding:50px 150px 0"> FCN结构模型 </p>
+                </div>
+            </div>
+        </div>
+
+        <div id="div_unet" style="padding-top:4px">
+            <hr class="featurette-divider">
+            <div class="row featurette">
+                <div class="col-md-7">
+                    <h2 class="fw-normal lh-1 mr-5">基于U-Net的 <span class="text-muted">医学图像分割算法</span></h2>
+                    <p class="lead mr-5 mt-5">
+                        U-Net(Ronneberger O, 2015)一种全卷积神经网络, 其结构由对称的编码器(下采样路径)和解码器(上采样路径)组成.
+                        主要特点是①跳跃连接： 编码器和解码器之间存在直接的跳跃连接, 有助于传递详细的空间信息.
+                        ②U形结构： 网络的结构呈U形, 使其能够捕捉多尺度的特征.
+                        U-Net通过U形结构和跳跃连接适应不同尺度的图像特征, 对医学图像中的细微结构有较强的感知能力；
+                        U-Net能够通过端到端学习直接从原始图像中学习特征, 避免了手动设计特征的繁琐过程.
+                        在U-Net对眼底血管图像数据集进行处理时, 提出了将较少的数据集图像进行随机切片来增加样本数据的方法, 大大降低了该模型对数据集的图像数量要求.
+                    </p>
+                </div>
+                <div class="col-md-5 order-md-1">
+                    <img src={{ url_for('static',filename='assets/img/pics/unet.png') }} width="445px"/>
+                    <p style="padding:50px 150px 0"> U-Net网络结构模型 </p>
+                </div>
+            </div>
+        </div>
+
+        <div id="div_deeplab" style="padding-top:4px">
+            <hr class="featurette-divider">
+            <div class="row featurette">
+                <div class="col-md-7 order-md-2">
+                    <h2 class="fw-normal lh-1 mr-5">基于Deeplab v3的 <span class="text-muted">医学图像分割算法</span></h2>
+                    <p class="lead mr-5 mt-5">
+                        Deeplab v3的创新点在于：
+                        ①提出了空洞卷积(Atrous Convolution)：采用了多尺度的空洞卷积, 允许网络在感受野不变的情况下扩大感受野, 从而捕获更大范围的上下文信息.
+                        这有助于处理图像中的细节和结构, 对医学图像分割尤为有用, 能够帮助网络更好地识别和分割细微结构.
+                        ②多尺度信息融合：通过采用不同尺度的特征图以及跳跃连接(如 ASPP 模块), DeepLabv3 能够融合不同尺度的信息, 提高了对物体的分割精度.在医学图像中, 这种多尺度信息融合能够帮助网络更好地理解图像中的结构和细节.
+                        ③全卷积网络结构：DeepLabv3 是一个端到端的全卷积网络, 这种特性使得它在医学图像中可以对整个图像进行分割, 特别适用于病灶的检测和分割.
+
+                    </p>
+                </div>
+                <div class="col-md-5 order-md-1">
+                    <img src={{ url_for('static',filename='assets/img/pics/deeplab.png') }} width="445px"/>
+                    <p style="padding:50px 150px 0"> ASPP模块结构 </p>
+                </div>
+            </div>
+        </div>
+
+        <div id="div_maskrcnn" style="padding-top:4px">
+            <hr class="featurette-divider">
+            <div class="row featurette">
+                <div class="col-md-7">
+                    <h2 class="fw-normal lh-1 mr-5">基于Mask R-CNN的 <span class="text-muted">医学图像分割算法</span></h2>
+                    <p class="lead mr-5 mt-5">
+                        Mask R-CNN(K He, 2017)12是一种深度学习模型, 是Faster R-CNN(Girshick R, 2016) 的扩展版本, 用于实例分割任务. 与传统的目标检测模型不同, Mask R-CNN不仅能够准确地检测图像中的对象, 还可以为每个检测到的对象生成像素级别精确的分割掩码.
+                        相比于以往的方法, Mask R-CNN 使用了更加精确的 ROI 对齐(Region of Interest Align), 这使得它可以更好地保留边界信息, 并且更精确地生成实例分割掩码.
+                        Mask R-CNN 在医学图像分割方面具有以下应用：
+                        ①细胞分割： 用于细胞图像中的精确细胞分割, 有助于细胞计数和形态分析.
+                        ②病变识别： 在医学影像中, 可用于定位和分割病变区域, 如肿瘤、血管等, 以辅助诊断和治疗.
+                        ③解剖结构分割： 用于分割医学影像中的解剖结构, 如器官、血管系统等.
+                    </p>
+                </div>
+                <div class="col-md-5 order-md-1">
+                    <img src={{ url_for('static',filename='assets/img/pics/maskrcnn.png') }} width="445px"/>
+                    <p style="padding:50px 150px 0"> Mask R-CNN网络结构模型 </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr class="featurette-divider">
+</main>
+
+<footer>
+    <div class="footer pt-lg-1 bg-white">
+        <!-- Footer -->
+        <p>
+            [1]刘宇,陈胜.医学图像分割方法综述[J].电子科技,2017,30(08):169-172.DOI:10.16180/j.cnki.issn1007-7820.2017.08.047.</p>
+        <div class="row align-items-center justify-content-md-between pb-1">
+            <div class="col-md-3">
+                <div class="copyright text-sm font-weight-bold text-center text-md-left">
+                    &copy; 2023 <a href="https://github.com/1128Prism/miss.git" class="font-weight-bold"
+                                   target="_blank">PrismIf</a>. All rights reserved
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- Core JS  -->
+<script src="{{ url_for('static', filename='assets/libs/jquery/dist/jquery.min.js') }}"></script>
+<script src="{{ url_for('static', filename='assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
+<script src="{{ url_for('static', filename='assets/libs/svg-injector/dist/svg-injector.min.js') }}"></script>
+<!-- Quick JS -->
+<script src="{{ url_for('static', filename='assets/js/quick-website.js') }}"></script>
+</body>
+</html>

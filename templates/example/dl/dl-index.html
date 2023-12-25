@@ -1,0 +1,783 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="PrismIf">
+
+    <title>深度学习</title>
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/carousel/">
+
+    <link href={{ url_for('static',filename='assets/libs/bootstrap/dist/css/bootstrap.min.css') }} rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href={{ url_for('static',filename='assets/css/unet.css') }} rel="stylesheet">
+    <!-- Favicon -->
+    <link rel="icon" href="{{ url_for('static',filename='assets/img/brand/favicon.png') }}" type="image/png'">
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+          href="{{ url_for('static',filename='assets/libs/@fortawesome/fontawesome-free/css/all.min.css') }}">
+    <!-- Quick CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/quick-website.css') }}" id="stylesheet">
+    <script type="text/javascript" src={{ url_for('static',filename='assets/js/jump.js') }}></script>
+
+    <script>
+        window.addEventListener("load", function () {
+            setTimeout(function () {
+                document.querySelector('body').classList.add('loaded');
+            }, 300);
+        });
+    </script>
+</head>
+<body class='bg-section-secondary'>
+<!-- Preloader -->
+<div class="preloader">
+    <div class="spinner-border text-primary" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+</div>
+<div class="modal fade" tabindex="-1" role="dialog" id="modal-cookies" data-backdrop="false"
+     aria-labelledby="modal-cookies" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-aside left-4 right-4 bottom-4">
+        <div class="modal-content bg-dark-dark">
+            <div class="modal-body">
+                <!-- Text -->
+                <p class="text-sm text-white mb-3">
+                    We use cookies so that our themes work for you. By using our website, you agree to our use of
+                    cookies.
+                </p>
+                <!-- Buttons -->
+                <a href="https://github.com/1128Prism/miss.git" class="btn btn-sm btn-white" target="_blank">Learn
+                    more</a>
+                <button type="button" class="btn btn-sm btn-primary mr-2" data-dismiss="modal">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-section-secondary">
+    <div class="container">
+        <!-- Brand -->
+        <a class="navbar-brand" href="/static">
+            <img alt="Image placeholder" src="{{ url_for('static',filename='assets/img/brand/dark.svg') }}"
+                 id="navbar-logo">
+        </a>
+        <!-- Toggler -->
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+                aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <!-- Collapse -->
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav mt-4 mt-lg-0 ml-auto">
+                <li class="nav-item ">
+                    <a class="nav-link" href="/">主页</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/about" target="_blank">医学图像分割算法简介</a>
+                </li>
+                <li class="nav-item dropdown dropdown-animate" data-toggle="hover">
+                    <a class="nav-link" href="/example" target="_blank" role="button" data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false">案例展示</a>
+                    <div class="dropdown-menu dropdown-menu-single">
+                        <a href="/example" target="_blank" class="dropdown-item">医学图像数据集介绍</a>
+                        <div class="dropdown-divider"></div>
+                        <a href="/example/classic" target="_blank" class="dropdown-item">传统医学图像分割方法</a>
+                        <div class="dropdown-divider"></div>
+                        <a href="/example/dl" target="_blank"
+                           class="dropdown-item">基于深度学习的医学图像分割方法</a>
+                    </div>
+                </li>
+                <li class="nav-item ">
+                    <a class="nav-link" href="/live-index" target="_blank">实时体验</a>
+                </li>
+            </ul>
+            <!-- Button -->
+            <a class="navbar-btn btn btn-sm btn-primary d-none d-lg-inline-block ml-3"
+               href="https://github.com/1128Prism/miss.git" target="_blank">
+                更多
+            </a>
+        </div>
+    </div>
+</nav>
+
+<!-- Content -->
+<div class="container bg-section-secondary">
+    <div id="dlCarousel" class="carousel slide" data-ride="carousel">
+        <ol class="carousel-indicators">
+            <li data-target="#dlCarousel" data-slide-to="0" class="active"></li>
+            <li data-target="#dlCarousel" data-slide-to="1"></li>
+            <li data-target="#dlCarousel" data-slide-to="2"></li>
+            <li data-target="#dlCarousel" data-slide-to="3"></li>
+        </ol>
+        <div class="carousel-inner" role="listbox">
+            <!-- Slide One -->
+            <div class="carousel-item active"
+                 style="background-image: url({{ url_for('static',filename='assets/img/pics/banner1.png') }})">
+                <div class="carousel-caption text-start">
+                    <h1>数据集介绍</h1>
+                    <p>
+                        非公开的睑板腺数据集
+                    </p>
+                    <p>
+                        <a class="btn btn-lg btn-primary" href="javascript:void(0)" onclick="intro_jump()">点击查看</a>
+                    </p>
+                </div>
+            </div>
+            <!-- Slide Two -->
+            <div class="carousel-item"
+                 style="background-image: url({{ url_for('static',filename='assets/img/pics/banner2.png') }})">
+                <div class="carousel-caption text-end">
+                    <h1>数据集处理</h1>
+                    <p>
+                        如何获得各种网络模型可以读取的数据集格式
+                    </p>
+                    <p>
+                        <a class="btn btn-lg btn-primary" href="javascript:void(0)" onclick="anno_jump()">点击查看</a>
+                    </p>
+                </div>
+            </div>
+            <!-- Slide Three -->
+            <div class="carousel-item"
+                 style="background-image:url({{ url_for('static',filename='assets/img/pics/banner3.png') }})">
+                <div class="carousel-caption text-end">
+                    <h1>实验结果</h1>
+                    <p>
+                        用不同的网络模型对数据集处理后获得的结果如何？
+                    </p>
+                    <p>
+                        <a class="btn btn-lg btn-primary" href="javascript:void(0)" onclick="result_jump()">点击查看</a>
+                    </p>
+                </div>
+            </div>
+            <!-- Slide Four -->
+            <div class="carousel-item"
+                 style="background-image: url({{ url_for('static',filename='assets/img/pics/banner4.png') }})">
+                <div class="carousel-caption text-start">
+                    <h1>目标识别</h1>
+                    <p>
+                        更进一步的目标识别效果如何？</p>
+                    <p>
+                        <a class="btn btn-lg btn-primary" href="javascript:void(0)"
+                           onclick="analysis_jump()">点击查看</a>
+                    </p>
+                </div>
+            </div>
+            <a class="carousel-control-prev" href="#dlCarousel" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon bg-brand-twitter" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#dlCarousel" role="button" data-slide="next">
+                <span class="carousel-control-next-icon bg-brand-twitter" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
+        </div>
+    </div>
+    <div id="div_intro" style="padding-top:2px">
+        <hr class="featurette-divider mb-3">
+        <div class="row featurette">
+            <div class="col-md-7">
+                <h4 class="featurette-heading">原始<span class="text-muted">数据集介绍</span></h4>
+                <p class="lead">
+                    此次实验的数据来自某医院眼科的真实患者眼睑红外成像.医师使用睑板红外成像仪
+                    对患者的上下眼皮进行照射成像,在电脑软件中重建对应的初始图像.
+                </p>
+            </div>
+            <div class="col-md-5">
+                <img src={{ url_for('static',filename='assets/img/pics/src_img.jpg') }} width="445px"/>
+                <h5 class="h6 mb-0" style="padding:30px 150px 0"> 原始数字成像 </h5>
+            </div>
+            <hr class="featurette-divider mb-3">
+            <div id="div_anno">
+                <h2>数据集<span class="text-muted">处理</span></h2>
+
+                <!-- Card -->
+                <div class="row mt-5">
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-body pb-5">
+                                <div class="pt-4 pb-5">
+                                    <img src="{{ url_for('static',filename='assets/img/pics/anno_img.png') }}"
+                                         class="img-fluid img-center"
+                                         style="height: 150px"/>
+
+                                </div>
+                                <h5 class="h4 lh-130 mb-3">图像标注. </h5>
+                                <p class="text-muted mb-0">选择VGG Image Annotator(VIA)进行目标区域的标注.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-body pb-5">
+                                <div class="pt-4 pb-5">
+                                    <img src="{{ url_for('static',filename='assets/img/pics/get_GT.png') }}"
+                                         class="img-fluid img-center"
+                                         style="height: 150px"/>
+                                </div>
+                                <h5 class="h4 lh-130 mb-3">获取有效信息.</h5>
+                                <p class="text-muted mb-0">
+                                    使用VIA进行手工标注后可以获得原始的json文件，设计算法进行有效信息提取.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-body pb-5">
+                                <div class="pt-4 pb-5">
+                                    <img src="{{ url_for('static',filename='assets/img/pics/make_data.png') }}"
+                                         class="img-fluid img-center"
+                                         style="height: 150px"/>
+                                </div>
+                                <h5 class="h4 lh-130 mb-3">数据集制作.</h5>
+                                <p class="text-muted mb-0">根据不同类型的数据集格式获取对应真值图像.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="div_result">
+                <h2>实验<span class="text-muted">结果</span></h2>
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-body pb-1">
+                            <div class="table-responsive" style='height:240px;'>
+                                <table class="table table-striped table-sm">
+                                    <thead>
+                                    <tr>
+                                        <th style="text-align:center;vertical-align: middle">结膜部分</th>
+                                        <th style="text-align:center;vertical-align: middle">睑板腺部分</th>
+                                        <th style="text-align:center;vertical-align: middle">上眼睑部分</th>
+                                        <th style="text-align:center;vertical-align: middle">下眼睑部分</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td style="text-align:center;vertical-align: middle">
+                                            <img height="170px"
+                                                 src={{ url_for('static',filename='csv/dl_img/c.png') }}>
+                                        </td>
+                                        <td style="text-align:center;vertical-align: middle">
+                                            <img height="170px"
+                                                 src={{ url_for('static',filename='csv/dl_img/m.png') }}>
+                                        </td>
+                                        <td style="text-align:center;vertical-align: middle">
+                                            <img height="170px"
+                                                 src={{ url_for('static',filename='csv/dl_img/cmu.png') }}>
+                                        </td>
+                                        <td style="text-align:center;vertical-align: middle">
+                                            <img height="170px"
+                                                 src={{ url_for('static',filename='csv/dl_img/cml.png') }}>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <h5 class="h6 mb-4 text-muted" style="text-align:center">
+                        使用不同深度学习模型对睑板腺数据集进行预测</h5>
+                </div>
+            </div>
+        </div>
+
+        <!-- m -->
+        <div style="padding-top:10px">
+            <hr class="featurette-divider mb-4">
+            <div class="row featurette">
+                <div class="col-md-7 pt-6">
+                    <h2>对睑板腺进行 <span class="text-muted">单独的训练预测 </span></h2>
+                    <p class="lead">睑板腺是位于眼睑内部的一对小腺体,
+                        具有分泌油脂的功能. 这些油脂(或称为睑缘腺分泌物)在眼睑边缘周围形成一层薄薄的润滑膜,
+                        有助于保护眼球表面免受蒸发和外界污染物的影响.</p>
+                    <p class="h4 mb-0"> 睑板腺对于眼睛的健康和适切的视觉功能至关重要. </p>
+
+                </div>
+                <div class="col-md-5">
+                    <img src={{ url_for('static',filename='assets/img/pics/color-m.png') }} width="445px"/>
+                    <h5 class="h6 mb-0" style="padding:10px 160px 0"> 睑板腺真值图像 </h5>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body pb-4">
+                            <div id="container1" style='width:500px;height:420px;'></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body pb-4">
+                            <div class="table-responsive" style='width:500px;height:420px;'>
+                                <table class="table table-striped table-sm">
+                                    <thead>
+                                    <tr>
+                                        <th style="text-align:center;vertical-align: middle">#</th>
+                                        <th style="text-align:center;vertical-align: middle">处理结果</th>
+                                        <th style="text-align:center;vertical-align: middle">DICE系数</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td style="text-align:center;vertical-align: middle">原图</td>
+                                        <td style="text-align:center;vertical-align: middle">
+                                            <img height="80px"
+                                                 src={{ url_for('static',filename='csv/dl_img/jpeg-c.png') }}
+                                            >
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align:center;vertical-align: middle">GT</td>
+                                        <td style="text-align:center;vertical-align: middle">
+                                            <img height="80px"
+                                                 src={{ url_for('static',filename='csv/dl_img/GT-c.png') }}
+                                            >
+                                        </td>
+                                        <td>
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align:center;vertical-align: middle">fcn 全卷积神经网络</td>
+                                        <td style="text-align:center;vertical-align: middle">
+                                            <img height="80px"
+                                                 src={{ url_for('static',filename='csv/dl_img/fcn-c.png') }}>
+                                        <td style="text-align:center;vertical-align: middle">
+                                            {{ data1[0] }}
+                                        </td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align:center;vertical-align: middle">U-Net网络</td>
+                                        <td style="text-align:center;vertical-align: middle">
+                                            <img height="80px"
+                                                 src={{ url_for('static',filename='csv/dl_img//unet-c.png') }}>
+                                        <td style="text-align:center;vertical-align: middle">
+                                            {{ data1[1] }}
+                                        </td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align:center;vertical-align: middle">deeplab v3网络</td>
+                                        <td style="text-align:center;vertical-align: middle">
+                                            <img height="80px"
+                                                 src={{ url_for('static',filename='csv/dl_img/deeplab-c.png') }}>
+                                        </td>
+                                        <td style="text-align:center;vertical-align: middle">
+                                            {{ data1[2] }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align:center;vertical-align: middle">Mask R-CNN网络</td>
+                                        <td style="text-align:center;vertical-align: middle">
+                                            <img height="80px"
+                                                 src={{ url_for('static',filename='csv/dl_img/maskrcnn-c.png') }}>
+                                        </td>
+                                        <td style="text-align:center;vertical-align: middle">
+                                            {{ data1[3] }}
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <h5 class="h6 mb-0 text-muted" style="text-align:center">
+                    不同网络模型对结膜部分预测结果
+                </h5>
+            </div>
+        </div>
+        <!-- c -->
+        <div style="padding-top:10px">
+            <hr class="featurette-divider mb-4">
+            <div class="row featurette">
+                <div class="col-md-7 pt-6">
+                    <h2>对结膜区域进行 <span class="text-muted">单独的训练预测 </span></h2>
+                    <p class="lead">睑板腺的缺失程度是相对于不同个体的眼睑进行计算的,
+                        如图所示, 眼睑具有0到3的meiboscore评估指标.
+                        睑板腺丢失面积为Gland 0, 无损失(左上图),
+                        Gland 1表示损失面积小于1/3(右上图),
+                        Gland 2表示损失面积在1/3和2/3之间(左下图),
+                        Gland 3表示损失面积大于2/3(右下图). </p>
+                    <p class="h4 mb-0"> 因此需要预测结膜区域来最后计算睑板腺缺失情况. </p>
+
+                </div>
+                <div class="col-md-5">
+                    <img src={{ url_for('static',filename='assets/img/pics/gland.png') }} width="445px"/>
+                    <h5 class="h6 mb-0" style="padding:10px 160px 0"> 睑板腺缺失情况分级 </h5>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body pb-4">
+                            <div id="container2" style='width:500px;height:420px;'></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body pb-4">
+                            <div class="table-responsive" style='width:500px;height:420px;'>
+                                <table class="table table-striped table-sm">
+                                    <thead>
+                                    <tr>
+                                        <th style="text-align:center;vertical-align: middle">#</th>
+                                        <th style="text-align:center;vertical-align: middle">处理结果</th>
+                                        <th style="text-align:center;vertical-align: middle">DICE系数</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td style="text-align:center;vertical-align: middle">原图</td>
+                                        <td style="text-align:center;vertical-align: middle">
+                                            <img height="80px"
+                                                 src={{ url_for('static',filename='csv/dl_img/jpeg-m.png') }}>
+                                        </td>
+
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align:center;vertical-align: middle">GT</td>
+                                        <td style="text-align:center;vertical-align: middle">
+                                            <img height="80px"
+                                                 src={{ url_for('static',filename='csv/dl_img/GT-m.png') }}>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align:center;vertical-align: middle">fcn 全卷积神经网络</td>
+                                        <td style="text-align:center;vertical-align: middle">
+                                            <img height="80px"
+                                                 src={{ url_for('static',filename='csv/dl_img/fcn-m.png') }}>
+                                        <td style="text-align:center;vertical-align: middle">
+                                            {{ data2[0] }}
+                                        </td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align:center;vertical-align: middle">U-Net网络</td>
+                                        <td style="text-align:center;vertical-align: middle">
+                                            <img height="80px"
+                                                 src={{ url_for('static',filename='csv/dl_img//unet-m.png') }}>
+                                        <td style="text-align:center;vertical-align: middle">
+                                            {{ data2[1] }}
+                                        </td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align:center;vertical-align: middle">deeplab v3网络</td>
+                                        <td style="text-align:center;vertical-align: middle">
+                                            <img height="80px"
+                                                 src={{ url_for('static',filename='csv/dl_img/deeplab-m.png') }}>
+                                        </td>
+                                        <td style="text-align:center;vertical-align: middle">
+                                            {{ data2[2] }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align:center;vertical-align: middle">Mask R-CNN网络</td>
+                                        <td style="text-align:center;vertical-align: middle">
+                                            <img height="80px"
+                                                 src={{ url_for('static',filename='csv/dl_img/maskrcnn-m.png') }}>
+                                        </td>
+                                        <td style="text-align:center;vertical-align: middle">
+                                            {{ data2[3] }}
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <h5 class="h6 mb-0 text-muted" style="text-align:center">
+                    不同网络模型对结膜部分预测结果
+                </h5>
+            </div>
+        </div>
+    </div>
+    <!-- 混合 -->
+    <div style="padding-top:10px" id="div_analysis">
+        <hr class="featurette-divider mb-4">
+        <div class="row featurette">
+            <div class="col-md-7 pt-6">
+                <h2>对眼睑部分进行 <span class="text-muted">混合训练 </span></h2>
+                <p class="lead">Mask R-CNN(K He, 2017)是一种深度学习模型,
+                    是Faster R-CNN(Girshick R, 2016)的扩展版本, 用于实例分割任务.
+                    与传统的目标检测模型不同,
+                    Mask R-CNN不仅能够准确地检测图像中的对象,
+                    还可以为每个检测到的对象生成像素级别精确的分割掩码.</p>
+                <img src={{ url_for('static',filename='assets/img/pics/maskrcnn.png') }} width="300px"/>
+                <p class="h4 mb-0"> 因此我们可以将两块区域同时进行训练. </p>
+
+            </div>
+            <div class="col-md-5">
+                <img src={{ url_for('static',filename='assets/img/pics/gt-color-cm.png') }} width="445px"/>
+                <h5 class="h6 mb-0" style="padding:10px 160px 0"> 眼睑真值图像 </h5>
+            </div>
+            <div class="col-md-13">
+                <div class="card">
+                    <div class="card-body pb-4">
+                        <div class="table-responsive" style='width:1060px;height:340px;'>
+                            <table class="table table-striped table-sm">
+                                <thead>
+                                <tr>
+                                    <th style="text-align:center;vertical-align: middle">原图</th>
+                                    <th style="text-align:center;vertical-align: middle">预测结果</th>
+                                    <th style="text-align:center;vertical-align: middle">原图</th>
+                                    <th style="text-align:center;vertical-align: middle">预测结果</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td style="text-align:center;vertical-align: middle">
+                                        <img height="80px"
+                                             src={{ url_for('static',filename='assets/img/pics/1.jpg') }}>
+                                    </td>
+                                    <td style="text-align:center;vertical-align: middle">
+                                        <img height="80px"
+                                             src={{ url_for('static',filename='assets/img/pics/2.jpg') }}>
+                                    </td>
+
+                                    <td style="text-align:center;vertical-align: middle">
+                                        <img height="80px"
+                                             src={{ url_for('static',filename='assets/img/pics/3.jpg') }}>
+                                    </td>
+                                    <td style="text-align:center;vertical-align: middle">
+                                        <img height="80px"
+                                             src={{ url_for('static',filename='assets/img/pics/4.jpg') }}>
+                                    </td>
+                                </tr>
+                                <tr>
+                                </tr>
+                                <tr>
+                                    <td style="text-align:center;vertical-align: middle">
+                                        <img height="80px"
+                                             src={{ url_for('static',filename='assets/img/pics/5.jpg') }}>
+                                    </td>
+                                    <td style="text-align:center;vertical-align: middle">
+                                        <img height="80px"
+                                             src={{ url_for('static',filename='assets/img/pics/6.jpg') }}>
+                                    </td>
+
+                                    <td style="text-align:center;vertical-align: middle">
+                                        <img height="80px"
+                                             src={{ url_for('static',filename='assets/img/pics/7.jpg') }}>
+                                    </td>
+                                    <td style="text-align:center;vertical-align: middle">
+                                        <img height="80px"
+                                             src={{ url_for('static',filename='assets/img/pics/8.jpg') }}>
+                                    </td>
+                                </tr>
+                                <tr>
+                                </tr>
+                                <tr>
+                                    <td style="text-align:center;vertical-align: middle">
+                                        <img height="80px"
+                                             src={{ url_for('static',filename='assets/img/pics/9.jpg') }}>
+                                    </td>
+                                    <td style="text-align:center;vertical-align: middle">
+                                        <img height="80px"
+                                             src={{ url_for('static',filename='assets/img/pics/10.jpg') }}>
+                                    </td>
+                                    <td style="text-align:center;vertical-align: middle">
+                                        <img height="80px"
+                                             src={{ url_for('static',filename='assets/img/pics/11.jpg') }}>
+                                    </td>
+                                    <td style="text-align:center;vertical-align: middle">
+                                        <img height="80px"
+                                             src={{ url_for('static',filename='assets/img/pics/12.jpg') }}>
+                                    </td>
+                                </tr>
+                                <tr>
+
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <h5 class="h6 mb-0 text-muted" style="text-align:center">
+                Mask R-CNN的识别预测结果
+            </h5>
+        </div>
+    </div>
+</div>
+
+<footer class="position-relative" id="footer-main">
+    <div class="footer pt-lg-1 bg-section-secondary">
+        <!-- Footer -->
+        <div class="container pt-1">
+            <div class="row align-items-center justify-content-md-between pb-1">
+                <div class="col-md-3">
+                    <div class="copyright text-sm font-weight-bold text-center text-md-left">
+                        &copy; 2023 <a href="https://github.com/1128Prism/miss.git" class="font-weight-bold"
+                                       target="_blank">PrismIf</a>. All rights reserved
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- Core JS  -->
+<script src="{{ url_for('static', filename='assets/libs/jquery/dist/jquery.min.js') }}"></script>
+<script src="{{ url_for('static', filename='assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
+<script src="{{ url_for('static', filename='assets/libs/svg-injector/dist/svg-injector.min.js') }}"></script>
+<!-- Quick JS -->
+<script src="{{ url_for('static', filename='assets/js/quick-website.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js"
+        integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"
+        integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha"
+        crossorigin="anonymous"></script>
+<!-- Echarts JS -->
+<script type="text/javascript" src="https://fastly.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+
+<script type="text/javascript">
+    $.ajax({
+        type: 'GET',
+        url: "/dl_data1",
+        dataType: 'json',
+        success: function (data) {
+            var dom = document.getElementById('container1');
+            var myChart = echarts.init(dom, null, {
+                renderer: 'canvas',
+                useDirtyRect: false
+            });
+            var app = {};
+            var option;
+            option = {
+                tooltip: {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data: ['FCN', 'U-Net', 'deeplab v3', 'Mask R-CNN']
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                toolbox: {
+                    feature: {
+                        saveAsImage: {}
+                    }
+                },
+                xAxis: {
+                    type: 'category',
+                    boundaryGap: false,
+                    data: data['header']
+                },
+                yAxis: {
+                    type: 'value',
+                    min: 0.7, // 设置纵坐标的最小值
+                    max: 1 // 设置纵坐标的最大值
+                },
+                series: [
+                    {
+                        name: 'FCN',
+                        type: 'line',
+                        data: data['data1']
+                    },
+                    {
+                        name: 'U-Net',
+                        type: 'line',
+                        data: data['data2']
+                    },
+                    {
+                        name: 'deeplab v3',
+                        type: 'line',
+                        data: data['data3']
+                    },
+                    {
+                        name: 'Mask R-CNN',
+                        type: 'line',
+                        data: data['data4']
+                    }
+                ]
+            };
+            if (option && typeof option === 'object') {
+                myChart.setOption(option);
+            }
+            window.addEventListener('resize', myChart.resize);
+        }
+    });
+</script>
+<script type="text/javascript">
+    $.ajax({
+        type: 'GET',
+        url: "/dl_data2",
+        dataType: 'json',
+        success: function (data) {
+            var dom = document.getElementById('container2');
+            var myChart = echarts.init(dom, null, {
+                renderer: 'canvas',
+                useDirtyRect: false
+            });
+            var app = {};
+            var option;
+            option = {
+                tooltip: {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data: ['FCN', 'U-Net', 'deeplab v3', 'Mask R-CNN']
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                toolbox: {
+                    feature: {
+                        saveAsImage: {}
+                    }
+                },
+                xAxis: {
+                    type: 'category',
+                    boundaryGap: false,
+                    data: data['header']
+                },
+                yAxis: {
+                    type: 'value',
+                    min: 0.7, // 设置纵坐标的最小值
+                    max: 1 // 设置纵坐标的最大值
+                },
+                series: [
+                    {
+                        name: 'FCN',
+                        type: 'line',
+                        data: data['data1']
+                    },
+                    {
+                        name: 'U-Net',
+                        type: 'line',
+                        data: data['data2']
+                    },
+                    {
+                        name: 'deeplab v3',
+                        type: 'line',
+                        data: data['data3']
+                    },
+                    {
+                        name: 'Mask R-CNN',
+                        type: 'line',
+                        data: data['data4']
+                    }
+                ]
+            };
+            if (option && typeof option === 'object') {
+                myChart.setOption(option);
+            }
+            window.addEventListener('resize', myChart.resize);
+        }
+    });
+</script>
+
+
+</body>
+</html>

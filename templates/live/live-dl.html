@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="author" content="PrismIf">
+    <title>实时体验</title>
+    <!-- Preloader -->
+    <style>
+        @keyframes hidePreloader {
+            0% {
+                width: 100%;
+                height: 100%;
+            }
+
+            100% {
+                width: 0;
+                height: 0;
+            }
+        }
+
+        body > div.preloader {
+            position: fixed;
+            background: white;
+            width: 100%;
+            height: 100%;
+            z-index: 1071;
+            opacity: 0;
+            transition: opacity .5s ease;
+            overflow: hidden;
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        body:not(.loaded) > div.preloader {
+            opacity: 1;
+        }
+
+        body:not(.loaded) {
+            overflow: hidden;
+        }
+
+        body.loaded > div.preloader {
+            animation: hidePreloader .5s linear .5s forwards;
+        }
+    </style>
+    <script>
+        window.addEventListener("load", function () {
+            setTimeout(function () {
+                document.querySelector('body').classList.add('loaded');
+            }, 300);
+        });
+    </script>
+    <!-- Favicon -->
+    <link rel="icon" href="{{ url_for('static',filename='assets/img/brand/favicon.png') }}" type="image/png'">
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+          href="{{ url_for('static',filename='assets/libs/@fortawesome/fontawesome-free/css/all.min.css') }}">
+    <!-- Quick CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/quick-website.css') }}" id="stylesheet">
+</head>
+
+<body class="bg-section-secondary">
+<!-- Preloader -->
+<div class="preloader">
+    <div class="spinner-border text-primary" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+</div>
+<div class="modal fade" tabindex="-1" role="dialog" id="modal-cookies" data-backdrop="false"
+     aria-labelledby="modal-cookies" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-aside left-4 right-4 bottom-4">
+        <div class="modal-content bg-dark-dark">
+            <div class="modal-body">
+                <!-- Text -->
+                <p class="text-sm text-white mb-3">
+                    We use cookies so that our themes work for you. By using our website, you agree to our use of
+                    cookies.
+                </p>
+                <!-- Buttons -->
+                <a href="https://github.com/1128Prism/miss.git" class="btn btn-sm btn-white" target="_blank">Learn
+                    more</a>
+                <button type="button" class="btn btn-sm btn-primary mr-2" data-dismiss="modal">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light">
+    <div class="container">
+        <!-- Brand -->
+        <a class="navbar-brand" href="/">
+            <img alt="Image placeholder" src="{{ url_for('static',filename='assets/img/brand/dark.svg') }}"
+                 id="navbar-logo">
+        </a>
+        <!-- Toggler -->
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+                aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <!-- Collapse -->
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav mt-4 mt-lg-0 ml-auto">
+                <li class="nav-item ">
+                    <a class="nav-link" href="/">主页</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/about" target="_blank">医学图像分割算法简介</a>
+                </li>
+                <li class="nav-item dropdown dropdown-animate" data-toggle="hover">
+                    <a class="nav-link" href="/example" target="_blank" role="button" data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false">案例展示</a>
+                    <div class="dropdown-menu dropdown-menu-single">
+                        <a href="/example" target="_blank" class="dropdown-item">医学图像常用数据集介绍</a>
+                        <div class="dropdown-divider"></div>
+                        <a href="/example/classic" target="_blank" class="dropdown-item">传统医学图像分割方法</a>
+                        <div class="dropdown-divider"></div>
+                        <a href="/example/dl" target="_blank"
+                           class="dropdown-item">基于深度学习的医学图像分割方法</a>
+                    </div>
+                </li>
+                <li class="nav-item ">
+                    <a class="nav-link" href="/live-index/" target="_blank">实时体验</a>
+                </li>
+            </ul>
+            <!-- Button -->
+            <a class="navbar-btn btn btn-sm btn-primary d-none d-lg-inline-block ml-3"
+               href="https://github.com/1128Prism/miss.git" target="_blank">
+                更多
+            </a>
+        </div>
+    </div>
+</nav>
+
+<!-- Main content -->
+<section class="slice slice-lg pt-lg-2 pb-0 pb-lg-2 bg-section-secondary">
+    <div class="container">
+        <!-- Title -->
+        <!-- Section title -->
+        <div class="row mb-3 justify-content-center text-center">
+            <div class="col-lg-6">
+                <h2 class="mt-4">
+                    基于深度学习的 <strong class="text-primary"> 医学图像分割算法</strong>
+                </h2>
+                <div class="mt-2">
+                    <p class="lead lh-180">上传睑板腺数据集图像，选择相应算法，系统进行处理后展示结果</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-4 text-center">
+            <!-- 选取图像 -->
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body pb-6">
+                        <p class="text-muted mb-4">选取图像</p>
+                        <!-- 上传图片 -->
+                        <form method="post" action="/live-dl/upload-success" enctype="multipart/form-data">
+                            <!-- 获取用户图片路径 -->
+                            <input type="file" style="color:#273444;background-color:#fff;" name="photo"/>
+                            <!-- 将路径传入后端 -->
+                            <input type="submit" class="btn btn-primary btn-icon btn-inner--text" value="确认"
+                                   style="margin-left: 24px"/>
+                        </form>
+                        <div class="pt-3 pb-4">
+                            <!-- 从后端传入图片路径并展示 -->
+                            <img src="{{ url_for('static', filename=pic_path) }}" class="img-fluid img-center"
+                                 style="height: 180px;" alt="srcImg"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 选取算法 -->
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body pb-6">
+                        <p class="text-muted mb-4">结果展示</p>
+                        <!-- 选择算法，处理图片 -->
+                        <div>
+                            <!-- 用默认的GET请求，传递算法名称 -->
+                            <form action="upload-success/result">
+                                <select id="algorithm" style="color:#273444;background-color:#fff;">
+                                    <option value="fcn">FCN 全卷积神经网络</option>
+                                    <option value="unet">U-Net 模型</option>
+                                    <option value="deeplab">deeplab v3模型</option>
+                                    <option value="maskrcnn">Mask R-CNN模型</option>
+                                </select>
+                                <button class="btn btn-primary btn-icon btn-inner--text" id="choice">确认</button>
+                            </form>
+                        </div>
+                        <div class="pt-3 pb-4">
+                            <!-- 获取处理完毕的图像 -->
+                            <img id="resPic" src="{{ url_for('static', filename=res_pic_path) }}"
+                                 class="img-fluid img-center" style="height: 180px;" alt="resImg"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer  -->
+<footer class="position-relative bg-section-secondary" id="footer-main">
+    <div class="pt-lg-1">
+        <div class="container pt-2">
+            <div class="row align-items-center justify-content-md-between pb-1">
+                <div class="col-md-3">
+                    <div class="copyright text-sm font-weight-bold text-center text-md-left">
+                        &copy; 2023 <a href="https://github.com/1128Prism/miss.git" class="font-weight-bold"
+                                       target="_blank">PrismIf</a>. All rights reserved
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- Core JS  -->
+<script src="{{ url_for('static', filename='assets/libs/jquery/dist/jquery.min.js') }}"></script>
+<script src="{{ url_for('static', filename='assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
+<script src="{{ url_for('static', filename='assets/libs/svg-injector/dist/svg-injector.min.js') }}"></script>
+
+<!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
+<script src="http://cdn.bootcss.com/jquery/3.5.1/jquery.min.js"></script>
+<!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
+<!-- Quick JS -->
+<script src="{{ url_for('static', filename='assets/js/quick-website.js') }}"></script>
+<script>
+    const algorithm = document.getElementById('algorithm');
+    const choice = document.getElementById('choice');
+
+    function chooseAlgorithm() {
+        $.ajax({
+            type: "GET",
+            url: "/live-dl/upload-success",
+            dataType: "json",
+            data: {"algorithm": algorithm.value},
+        });
+    }
+
+    choice.addEventListener('click', chooseAlgorithm);
+</script>
+
+</body>
+</html>
+
